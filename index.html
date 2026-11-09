@@ -54,6 +54,7 @@ content="年末相聚，讓每一杯都有自己的故事。">
 <meta name="twitter:image"
 content="og-image.jpg">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
@@ -325,7 +326,7 @@ img {
   align-items: center;
 }
 
-/* 橫向海報卡片比例 + 懸浮放大互動效果 */
+/* 方案 1 調整：橫向海報卡片比例 + 懸浮放大互動效果 */
 .hero-art {
   width: 100%;
   max-width: 580px;
@@ -367,6 +368,7 @@ img {
   will-change: transform;
 }
 
+/* 滑鼠移入時的放大效果 */
 .hero-art:hover {
   transform: translateY(-4px) scale(1.02);
   border-color: rgba(199, 166, 106, 0.85);
@@ -782,16 +784,26 @@ img {
   color: rgba(255,255,255,.6);
 }
 
-/* Age / legal notice */
-
+/* Age / legal notice (隨網頁捲動置底常駐) */
 .legal {
-  padding: 17px 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 12px 20px;
   text-align: center;
-  background: #100e0c;
-  color: rgba(255,255,255,.45);
-  font-size: 9px;
-  line-height: 2;
+  background: rgba(16, 14, 12, 0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(199, 166, 106, 0.2);
+  color: rgba(255,255,255,.75);
+  font-size: 11px;
+  line-height: 1.6;
   letter-spacing: .08em;
+}
+
+body {
+  padding-bottom: 60px;
 }
 
 /* Reveal */
@@ -1036,10 +1048,10 @@ img {
   }
 }
 
-/* Floating Contact Button */
+/* Floating Contact Button (配合常駐警語列調整高度) */
 .floating-inquiry-btn {
   position: fixed;
-  bottom: 30px;
+  bottom: 75px;
   right: 30px;
   z-index: 99;
   display: inline-flex;
@@ -1078,7 +1090,7 @@ img {
 
 @media (max-width: 640px) {
   .floating-inquiry-btn {
-    bottom: 20px;
+    bottom: 75px;
     right: 20px;
     padding: 11px 18px;
     font-size: 12px;
@@ -1757,17 +1769,22 @@ img {
 
 </footer>
 
-<!-- LEGAL -->
+<!-- LEGAL NOTICE (固定常駐最底端) -->
 
 <div class="legal">
-
-  飲酒過量，有害健康。未滿十八歲禁止飲酒。<br>
-
-  本頁提供酒款資訊與選酒介紹，實際商品資訊請洽汰暄酒業。<br>
-
-  請理性飲酒，切勿酒後駕車。
-
+  飲酒過量，有害健康。未滿十八歲禁止飲酒。本頁提供酒款資訊與選酒介紹，實際商品資訊請洽汰暄酒業。請理性飲酒，切勿酒後駕車。
 </div>
+
+<!-- FLOATING INQUIRY BUTTON -->
+
+<a href="https://reurl.cc/dO1Rey"
+   class="floating-inquiry-btn"
+   target="_blank"
+   rel="noopener"
+   aria-label="尾牙專人洽詢">
+  <span>尾牙專人洽詢</span>
+  <span class="icon">↗</span>
+</a>
 
 <script>
 
@@ -1876,16 +1893,6 @@ document.querySelectorAll(".wine-image, .hero-art").forEach(container => {
 });
 
 </script>
-
-<!-- FLOATING INQUIRY BUTTON -->
-<a href="https://reurl.cc/dO1Rey"
-   class="floating-inquiry-btn"
-   target="_blank"
-   rel="noopener"
-   aria-label="尾牙專人洽詢">
-  <span>尾牙專人洽詢</span>
-  <span class="icon">↗</span>
-</a>
 
 </body>
 </html>
