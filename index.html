@@ -328,24 +328,34 @@ img {
 
 .hero-art {
   width: 100%;
-  max-width: 540px; /* 寬度稍微放寬 */
-  aspect-ratio: 16 / 9; /* 由 4/5 改為橫向比例 */
-  border: 1px solid rgba(199, 166, 106, 0.35); /* 金色框直接做在外圍 */
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  background: transparent;
+  max-width: 480px;
+  aspect-ratio: 4 / 5;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      145deg,
+      #352720,
+      #171311 65%
+    );
 }
 
-/* 移除原本內縮 10% 會切到圖的內線框 */
 .hero-art::before {
-  display: none;
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border: 1px solid rgba(199,166,106,.3);
 }
 
-/* 讓圖片完整填滿容器，不加 padding */
-.hero-art img {
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.hero-art::after {
+  content: "TAIXUAN";
+  position: absolute;
+  right: -30px;
+  bottom: 30px;
+  font-size: 10px;
+  letter-spacing: .45em;
+  color: rgba(255,255,255,.2);
+  transform: rotate(-90deg);
 }
 
 .hero-art img {
@@ -1772,6 +1782,2165 @@ document.querySelectorAll(".wine-image, .hero-art").forEach(container => {
 });
 
 </script>
+
+</body>
+</html>
+沒有出來呀
+
+如果貼上程式碼更新後還是沒有顯示，請依序檢查以下 3 個最常見的原因：
+
+瀏覽器快取（Cache）問題
+
+GitHub Pages 更新後，瀏覽器常常會記住舊版本的檔案。
+
+請在網頁上按 Ctrl + F5（Mac 按 Cmd + Shift + R）強制重新整理，或用無痕視窗（Incognito）開啟網頁試試看。
+
+GitHub Pages 部署延遲
+
+剛 commit 覆蓋 index.html 後，GitHub 通常需要 1～3 分鐘 重新打包部署。
+
+請到倉庫頁面的 Actions 標籤，確認最新一次的 pages build and deployment 是否已經打綠色勾勾（Success）。
+
+確認圖片副檔名是否有隱藏的 .jpg.jpg
+
+查看先前圖片的 commit 紀錄，先前檔名曾出現過 ...jpg.jpg 的情況（例如 Rename les-ormieres-2024.jpg.jpg to les-ormieres-2024.jpg）。   
+image_7d59d6.png
+
+請在瀏覽器直接輸入圖片的完整網址測試，例如：
+[https://joyhsu0702.github.io/year-end-wine-banquet/hero.jpg](https://joyhsu0702.github.io/year-end-wine-banquet/hero.jpg)
+
+如果打開是 404 Not Found：代表該圖片檔名不對，或是圖片根本沒有成功推送到這層目錄。
+
+如果能正常看到圖片：代表圖片本身沒問題，是 HTML 的快取還沒更新。
+
+可以先在瀏覽器直接開圖片網址測試，有看到 404 還是圖片嗎？
+
+這個圖片的設計, 不符合表框, 若不改圖, 改上面這塊的設計, 要怎麼改比較好?
+
+目前右側外框是設計成直向（4:5 比例）並帶有內縮金色線框，但放入的 hero.jpg 是一張橫向宣傳海報，導致兩側被硬切、上下留出大片深色空隙，金色邊框也直接被橫圖切斷。   
+index.html
++ 1
+
+在不修改圖片的前提下，最推薦的改法有以下 3 種方向：
+
+方案 1：改為「橫向雜誌卡片」比例（最平衡、不壓迫）
+將外層比例直接改為貼合橫圖，並拿掉垂直線框，改為純粹精緻的陰影與金屬細邊。
+
+視覺效果：右側變成一張俐落、懸浮於暗色背景上的橫向主視覺海報。
+
+CSS 修改方式：
+在 <style> 裡找到 .hero-art 相關樣式，調整比例與內框：
+
+CSS
+.hero-art {
+  width: 100%;
+  max-width: 540px; /* 寬度稍微放寬 */
+  aspect-ratio: 16 / 9; /* 由 4/5 改為橫向比例 */
+  border: 1px solid rgba(199, 166, 106, 0.35); /* 金色框直接做在外圍 */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  background: transparent;
+}
+
+/* 移除原本內縮 10% 會切到圖的內線框 */
+.hero-art::before {
+  display: none;
+}
+
+/* 讓圖片完整填滿容器，不加 padding */
+.hero-art img {
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+方案 2：改為「高級畫廊／相框裝裱」風格（保留直向氛圍）
+如果想維持原本右側直立大器的排版格局，可以把外框當成「實體畫廊卡紙襯底（Matte Frame）」，讓橫圖自然居中展示。
+
+視覺效果：橫圖上下留白變成刻意的「深色襯紙」，金色框退到外側，下方空白處補上一行精緻的英文字或金色小標，整體像精品型錄。
+
+CSS 修改方式：
+
+CSS
+
+.hero-art {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border: 1px solid rgba(199, 166, 106, 0.3); /* 金框移到最外圍 */
+  background: #171311;
+}
+
+.hero-art::before {
+  /* 內線框拿掉，避免與橫圖邊緣穿插打架 */
+  display: none;
+}
+
+.hero-art img {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08); /* 圖片本身加細微邊緣 */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+方案 3：全面「去邊框化」＋「暗角融入光暈」（現代極簡風）
+直接拿掉右側所有邊框（.hero-art::before 與邊框線），讓圖片直接浮在背景的紅褐光暈上，邊緣加上羽化或純深色陰影。
+
+視覺效果：右側不再有僵硬的方形框架，海報的深色底色與網頁背景融為一體，視覺焦點完全落在酒瓶與文案上。
+
+CSS 修改方式：
+
+CSS
+.hero-art {
+  border: none;
+  background: transparent;
+  max-width: 520px;
+  aspect-ratio: auto; /* 順應圖片原始比例 */
+}
+
+.hero-art::before,
+.hero-art::after {
+  display: none; /* 移除外框線與 TAIXUAN 旋轉字 */
+}
+
+.hero-art img {
+  padding: 0;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.7));
+}
+建議選擇
+若想要版面最俐落、不遮擋任何字：推薦 方案 1。
+
+若想要保有原本大氣留白與高級感：推薦 方案 2。
+
+我採 方案 1, 但是圖片不大, 有辦法再改一下, 改成, 游標移到該張圖片, 會自動放大
+
+已為你改好，採用方案 1 的橫向海報卡片設計，並加入了尺寸放大＋游標移入時平滑放大（Hover Zoom）的互動效果。
+
+Your HTML file is ready
+
+「HTML」圖示
+index
+ HTML 
+主要改動說明
+尺寸放大：
+
+將外框比例改為符合海報橫幅的 aspect-ratio: 16 / 9。
+
+最大寬度由 480px 擴展至 580px，桌面版左右兩欄比例改為 1fr 1.05fr，讓右側視覺更開闊大氣。
+
+游標懸浮放大（Hover Zoom）：
+
+游標移上卡片時，外框微浮起（translateY(-4px)）且金邊加亮。
+
+圖片本身平滑放大 1.1 倍（transform: scale(1.1)），並透過 overflow: hidden 保留邊框邊界，呈現精緻的雜誌動態感。
+
+消除雜訊線框：
+
+移除了會切過橫圖的內縮邊框（display: none），圖片直接滿版展示（padding: 0; object-fit: cover）。
+
+你可以直接下載上方的 index.html 覆蓋倉庫中的檔案，或複製以下主要調整的 CSS 覆蓋原樣式：
+
+CSS
+
+/* 方案 1 調整：橫向海報卡片比例 + 懸浮放大互動效果 */
+.hero-art {
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid rgba(199, 166, 106, 0.4);
+  background: #171311;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.hero-art::before {
+  display: none;
+}
+
+.hero-art::after {
+  content: "TAIXUAN";
+  position: absolute;
+  right: 18px;
+  bottom: 12px;
+  font-size: 9px;
+  letter-spacing: .35em;
+  color: rgba(255,255,255,.2);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-art img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 0;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+/* 滑鼠移入時的放大效果 */
+.hero-art:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(199, 166, 106, 0.85);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.85);
+}
+
+.hero-art:hover img {
+  transform: scale(1.1);
+}
+再幫我加一個, 隨著頁面移動的洽詢按鈕"https://reurl.cc/dO1Rey"
+
+Your HTML file is ready
+
+「HTML」圖示
+index
+ HTML 
+已為你在頁面右下角加入常駐的「尾牙專人洽詢 ↗」懸浮按鈕。
+
+加入的樣式與結構
+按鈕連結：直連 [https://reurl.cc/dO1Rey](https://reurl.cc/dO1Rey)，設定在新分頁開啟（target="_blank" rel="noopener"）。
+
+品牌視覺：採用酒紅色底（var(--wine)）搭配細緻金邊（var(--gold)）與毛玻璃光暈（backdrop-filter），與全站高雅調性完全一致。
+
+動態微互動：滑鼠移入時帶有輕微浮起與箭頭位移效果，並完整相容手機版螢幕縮放。
+
+直接將下載的 index.html 覆蓋倉庫即可生效。若要自行修改按鈕文字或顏色，可參考下方加入的程式碼：
+
+HTML
+
+<!-- 加在 </style> 之前 -->
+<style>
+.floating-inquiry-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 99;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  background: var(--wine);
+  color: var(--white);
+  border: 1px solid var(--gold);
+  border-radius: 50px;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  transition: transform .3s ease, background-color .3s ease, box-shadow .3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.floating-inquiry-btn span.icon {
+  display: inline-block;
+  color: var(--gold);
+  font-size: 15px;
+  transition: transform .3s ease;
+}
+
+.floating-inquiry-btn:hover {
+  background: #7d2535;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
+}
+
+.floating-inquiry-btn:hover span.icon {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 640px) {
+  .floating-inquiry-btn {
+    bottom: 20px;
+    right: 20px;
+    padding: 11px 18px;
+    font-size: 12px;
+  }
+}
+</style>
+
+<!-- 加在 </body> 之前 -->
+<a href="https://reurl.cc/dO1Rey"
+   class="floating-inquiry-btn"
+   target="_blank"
+   rel="noopener"
+   aria-label="尾牙專人洽詢">
+  <span>尾牙專人洽詢</span>
+  <span class="icon">↗</span>
+</a>
+
+
+
+
+Gemini 是 AI，有時可能會出錯。
+
+正在分析
+
+搜尋...
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--
+  汰暄酒業｜尾牙精品酒款特輯
+  暫用網址：https://YOUR-DOMAIN.example/
+  正式部署前請替換所有 YOUR-DOMAIN.example
+-->
+
+<title>尾牙選酒特輯｜汰暄酒業</title>
+
+<meta name="description"
+content="汰暄酒業尾牙選酒特輯。五款宴席酒款，從日式餐飲、澳洲經典到法國隆河，探索適合年末相聚的葡萄酒。">
+
+<meta name="keywords"
+content="汰暄酒業,尾牙選酒,宴席葡萄酒,Les Ormieres,Gemma Boreal,傑卡斯,Famille Perrin,Grant Burge">
+
+<meta name="author" content="汰暄酒業">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#211714">
+
+<!-- 正式部署時替換 -->
+<link rel="canonical"
+href="https://YOUR-DOMAIN.example/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:site_name" content="汰暄酒業">
+<meta property="og:title" content="尾牙選酒特輯｜汰暄酒業">
+<meta property="og:description"
+content="年末相聚，讓每一杯都有自己的故事。汰暄酒業五款宴席酒款選品。">
+
+<meta property="og:url"
+content="https://YOUR-DOMAIN.example/">
+
+<meta property="og:image"
+content="og-image.jpg">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt"
+content="汰暄酒業尾牙選酒特輯">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="尾牙選酒特輯｜汰暄酒業">
+<meta name="twitter:description"
+content="年末相聚，讓每一杯都有自己的故事。">
+<meta name="twitter:image"
+content="og-image.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+rel="stylesheet">
+
+<style>
+:root {
+  --wine: #681e2c;
+  --wine-dark: #211714;
+  --wine-black: #171311;
+  --cream: #f4efe5;
+  --cream-dark: #e6dccb;
+  --gold: #c7a66a;
+  --muted: #a99b8b;
+  --white: #fffaf2;
+
+  --font-serif: "Noto Serif TC", serif;
+  --font-sans: "Inter", sans-serif;
+
+  --container: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--wine-dark);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  width: min(var(--container), calc(100% - 64px));
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+
+/* Navigation */
+
+.site-header {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 28px 0;
+  color: var(--white);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  letter-spacing: .08em;
+}
+
+.brand small {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 8px;
+  letter-spacing: .25em;
+  margin-top: 5px;
+  opacity: .65;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+
+.nav-links a {
+  opacity: .75;
+  transition: opacity .25s;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+.nav-contact {
+  border: 1px solid rgba(255,255,255,.4);
+  padding: 11px 17px;
+}
+
+.menu-toggle {
+  display: none;
+  border: 0;
+  color: white;
+  background: transparent;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+/* Hero */
+
+.hero {
+  position: relative;
+  min-height: 760px;
+  min-height: min(900px, 100svh);
+  background: var(--wine-black);
+  color: var(--white);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 72% 45%,
+      rgba(104,30,44,.42),
+      transparent 50%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(23,19,17,.97) 0%,
+      rgba(23,19,17,.82) 48%,
+      rgba(23,19,17,.32) 100%
+    );
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  border: 1px solid rgba(199,166,106,.18);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  align-items: center;
+  gap: 40px;
+  padding-top: 90px;
+}
+
+.hero-copy {
+  max-width: 570px;
+}
+
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 35px;
+}
+
+.hero-kicker::before {
+  content: "";
+  width: 35px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(40px, 5.5vw, 76px);
+  line-height: 1.35;
+  letter-spacing: .05em;
+  margin: 0;
+}
+
+.hero h1 span {
+  display: block;
+  color: var(--gold);
+  font-size: .48em;
+  letter-spacing: .15em;
+  margin-top: 12px;
+}
+
+.hero-description {
+  margin-top: 30px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 2.2;
+  color: rgba(255,250,242,.75);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.primary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--gold);
+  font-size: 11px;
+  letter-spacing: .12em;
+}
+
+.primary-link span {
+  color: var(--gold);
+  font-size: 17px;
+}
+
+.hero-note {
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: rgba(255,255,255,.45);
+}
+
+.hero-visual {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 方案 1 調整：橫向海報卡片比例 + 懸浮放大互動效果 */
+.hero-art {
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid rgba(199, 166, 106, 0.4);
+  background: #171311;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.hero-art::before {
+  display: none;
+}
+
+.hero-art::after {
+  content: "TAIXUAN";
+  position: absolute;
+  right: 18px;
+  bottom: 12px;
+  font-size: 9px;
+  letter-spacing: .35em;
+  color: rgba(255,255,255,.2);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-art img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 0;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+/* 滑鼠移入時的放大效果 */
+.hero-art:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(199, 166, 106, 0.85);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.85);
+}
+
+.hero-art:hover img {
+  transform: scale(1.1);
+}
+
+.image-placeholder {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 25px;
+  color: rgba(255,255,255,.45);
+}
+
+.image-placeholder .placeholder-number {
+  font-family: var(--font-serif);
+  font-size: 48px;
+  color: rgba(199,166,106,.6);
+}
+
+.image-placeholder p {
+  font-size: 9px;
+  line-height: 2;
+  letter-spacing: .12em;
+}
+
+.hero-side-label {
+  position: absolute;
+  right: -35px;
+  top: 50%;
+  transform: rotate(90deg);
+  transform-origin: center;
+  font-size: 9px;
+  letter-spacing: .25em;
+  color: rgba(255,255,255,.4);
+}
+
+/* Intro */
+
+.intro {
+  padding: 125px 0 110px;
+  background: var(--cream);
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: .7fr 1.3fr;
+  gap: 100px;
+  align-items: start;
+}
+
+.intro-number {
+  font-family: var(--font-serif);
+  font-size: 90px;
+  color: rgba(104,30,44,.14);
+  line-height: 1;
+}
+
+.intro h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(27px, 3vw, 43px);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.intro p {
+  max-width: 620px;
+  margin-top: 28px;
+  font-size: 13px;
+  line-height: 2.3;
+  color: #71665b;
+}
+
+/* Editorial statement */
+
+.statement {
+  background: var(--wine);
+  color: var(--white);
+  padding: 80px 0;
+}
+
+.statement-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+}
+
+.statement h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(25px, 3vw, 40px);
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.statement-side {
+  max-width: 240px;
+  font-size: 10px;
+  line-height: 2;
+  letter-spacing: .1em;
+  color: rgba(255,255,255,.6);
+}
+
+/* Wine collection */
+
+.collection {
+  padding: 120px 0;
+}
+
+.collection-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 80px;
+  gap: 30px;
+}
+
+.collection-heading h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 15px 0 0;
+}
+
+.collection-heading p {
+  max-width: 310px;
+  font-size: 11px;
+  line-height: 2;
+  color: #82766a;
+}
+
+.wine-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  align-items: center;
+  padding: 75px 0;
+  border-top: 1px solid rgba(104,30,44,.17);
+}
+
+.wine-card:nth-child(even) .wine-image {
+  order: 2;
+}
+
+.wine-card:nth-child(even) .wine-content {
+  order: 1;
+}
+
+.wine-image {
+  position: relative;
+  min-height: 530px;
+  background: var(--wine-dark);
+  overflow: hidden;
+}
+
+.wine-image::before {
+  content: "";
+  position: absolute;
+  inset: 20px;
+  border: 1px solid rgba(199,166,106,.25);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wine-image img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 530px;
+  object-fit: contain;
+  padding: 35px;
+}
+
+.wine-image .image-placeholder {
+  min-height: 530px;
+}
+
+.wine-image .placeholder-number {
+  font-size: 75px;
+}
+
+.wine-content {
+  max-width: 470px;
+}
+
+.wine-number {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--wine);
+  letter-spacing: .1em;
+}
+
+.wine-region {
+  margin-top: 18px;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #958574;
+}
+
+.wine-content h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3vw, 43px);
+  font-weight: 400;
+  line-height: 1.65;
+  margin: 18px 0;
+  overflow-wrap: anywhere;
+}
+
+.wine-vintage {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: .2em;
+  color: var(--wine);
+}
+
+.wine-tagline {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.9;
+  margin-top: 28px;
+}
+
+.wine-description {
+  font-size: 12px;
+  line-height: 2.4;
+  color: #766b60;
+  margin-top: 20px;
+}
+
+.wine-divider {
+  width: 45px;
+  height: 1px;
+  background: var(--gold);
+  margin: 30px 0;
+}
+
+.wine-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.wine-footer span {
+  font-size: 9px;
+  letter-spacing: .12em;
+  color: #938574;
+}
+
+.wine-footer a {
+  font-size: 10px;
+  letter-spacing: .1em;
+  border-bottom: 1px solid var(--wine);
+  padding-bottom: 8px;
+}
+
+/* Closing */
+
+.closing {
+  background: var(--wine-black);
+  color: var(--white);
+  padding: 120px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing::before {
+  content: "TAIXUAN";
+  position: absolute;
+  font-size: clamp(100px, 20vw, 260px);
+  font-weight: 300;
+  letter-spacing: .1em;
+  color: rgba(255,255,255,.025);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.closing-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.closing h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 5vw, 62px);
+  font-weight: 400;
+  line-height: 1.8;
+  margin: 25px 0;
+}
+
+.closing p {
+  font-size: 12px;
+  line-height: 2.3;
+  color: rgba(255,255,255,.6);
+}
+
+.closing .primary-link {
+  margin-top: 35px;
+}
+
+/* Contact */
+
+.contact {
+  padding: 100px 0;
+  background: var(--cream-dark);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+}
+
+.contact h2 {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.8;
+  margin: 20px 0;
+}
+
+.contact p {
+  font-size: 12px;
+  line-height: 2.3;
+  color: #71665b;
+}
+
+.contact-details {
+  border-top: 1px solid rgba(104,30,44,.2);
+}
+
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(104,30,44,.2);
+  font-size: 11px;
+}
+
+.contact-row span:first-child {
+  color: #918273;
+}
+
+.contact-row span:last-child {
+  text-align: right;
+}
+
+/* Footer */
+
+.footer {
+  background: var(--wine-black);
+  color: var(--white);
+  padding: 30px 0;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.footer-brand {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: .1em;
+}
+
+.footer small {
+  font-size: 9px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: .1em;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  font-size: 10px;
+  color: rgba(255,255,255,.6);
+}
+
+/* Age / legal notice */
+
+.legal {
+  padding: 17px 20px;
+  text-align: center;
+  background: #100e0c;
+  color: rgba(255,255,255,.45);
+  font-size: 9px;
+  line-height: 2;
+  letter-spacing: .08em;
+}
+
+/* Reveal */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .container {
+    width: calc(100% - 48px);
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 120px 0 70px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    padding-top: 20px;
+  }
+
+  .hero-copy {
+    max-width: 700px;
+  }
+
+  .hero-visual {
+    min-height: auto;
+  }
+
+  .hero-art {
+    max-width: 100%;
+  }
+
+  .hero-side-label {
+    display: none;
+  }
+
+  .intro-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .intro-number {
+    font-size: 60px;
+  }
+
+  .wine-card {
+    gap: 40px;
+  }
+
+  .wine-image,
+  .wine-image img,
+  .wine-image .image-placeholder {
+    min-height: 400px;
+    height: 400px;
+  }
+
+  .wine-content h3 {
+    font-size: 30px;
+  }
+
+  .statement-inner {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+
+  .site-header {
+    padding: 20px 0;
+  }
+
+  .brand {
+    font-size: 15px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    background: var(--wine-black);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 32px;
+    font-size: 14px;
+    z-index: 30;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    opacity: 1;
+  }
+
+  .nav-contact {
+    border: 0;
+  }
+
+  .hero {
+    padding-top: 125px;
+  }
+
+  .hero::after {
+    inset: 12px;
+  }
+
+  .hero h1 {
+    font-size: clamp(37px, 11vw, 58px);
+  }
+
+  .hero-description {
+    font-size: 13px;
+  }
+
+  .hero-actions {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .intro {
+    padding: 75px 0;
+  }
+
+  .intro h2 {
+    font-size: 27px;
+  }
+
+  .statement {
+    padding: 60px 0;
+  }
+
+  .statement h2 {
+    font-size: 26px;
+  }
+
+  .collection {
+    padding: 75px 0;
+  }
+
+  .collection-heading {
+    flex-direction: column;
+    align-items: start;
+    margin-bottom: 45px;
+  }
+
+  .collection-heading h2 {
+    font-size: 36px;
+  }
+
+  .wine-card {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 50px 0;
+  }
+
+  .wine-card:nth-child(even) .wine-image,
+  .wine-card:nth-child(even) .wine-content {
+    order: initial;
+  }
+
+  .wine-image,
+  .wine-image img,
+  .wine-image .image-placeholder {
+    height: 430px;
+    min-height: 430px;
+  }
+
+  .wine-image img {
+    padding: 25px;
+  }
+
+  .wine-content h3 {
+    font-size: 31px;
+  }
+
+  .closing {
+    padding: 80px 0;
+  }
+
+  .contact {
+    padding: 75px 0;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .contact h2 {
+    font-size: 30px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Floating Contact Button */
+.floating-inquiry-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 99;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  background: var(--wine);
+  color: var(--white);
+  border: 1px solid var(--gold);
+  border-radius: 50px;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  letter-spacing: .08em;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  transition: transform .3s ease, background-color .3s ease, box-shadow .3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.floating-inquiry-btn span.icon {
+  display: inline-block;
+  color: var(--gold);
+  font-size: 15px;
+  transition: transform .3s ease;
+}
+
+.floating-inquiry-btn:hover {
+  background: #7d2535;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
+}
+
+.floating-inquiry-btn:hover span.icon {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 640px) {
+  .floating-inquiry-btn {
+    bottom: 20px;
+    right: 20px;
+    padding: 11px 18px;
+    font-size: 12px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-inner">
+
+    <a class="brand" href="#top">
+      汰暄酒業
+      <small>TAIXUAN ONLINE WINE</small>
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="開啟導覽"
+      aria-expanded="false">
+      ☰
+    </button>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#story">THE STORY</a>
+      <a href="#collection">THE COLLECTION</a>
+      <a href="#contact">CONTACT</a>
+      <a href="#contact" class="nav-contact">酒款諮詢</a>
+    </nav>
+
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+    <div class="hero-copy reveal">
+
+      <div class="hero-kicker eyebrow">
+        YEAR-END WINE SELECTION · 2026
+      </div>
+
+      <h1>
+        年末相聚
+        <span>讓每一杯都有自己的故事</span>
+      </h1>
+
+      <p class="hero-description">
+        一場宴席，不只是菜色與座次。<br>
+        從日式餐飲的熟悉風味，到法國與澳洲的經典酒款，<br>
+        讓每一次舉杯，都成為值得記住的時刻。
+      </p>
+
+      <div class="hero-actions">
+
+        <a class="primary-link" href="#collection">
+          探索宴席酒款
+          <span>↗</span>
+        </a>
+
+        <span class="hero-note">
+          FIVE WINES · ONE OCCASION
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="hero-visual reveal">
+
+      <div class="hero-art">
+
+        <img
+          src="hero.jpg"
+          alt="汰暄酒業尾牙酒款主視覺"
+          onerror="this.style.display='none';">
+
+        <div class="image-placeholder">
+          <div class="placeholder-number">2026</div>
+          <p>
+            YEAR-END WINE SELECTION<br>
+            HERO IMAGE
+          </p>
+        </div>
+
+      </div>
+
+      <div class="hero-side-label">
+        FINE WINE · EXCEPTIONAL LIFE
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- INTRO -->
+
+<section class="intro" id="story">
+
+  <div class="container intro-grid">
+
+    <div class="reveal">
+
+      <div class="section-label">
+        THE ART OF GATHERING
+      </div>
+
+      <div class="intro-number">
+        01
+      </div>
+
+    </div>
+
+    <div class="reveal">
+
+      <h2>
+        為重要的相聚，<br>
+        選一瓶恰到好處的酒。
+      </h2>
+
+      <p>
+        尾牙，是一年工作的回望，也是新一年的開始。
+        從餐桌上的第一杯，到彼此舉杯的瞬間，
+        酒款的選擇，讓聚會多一份細節與記憶。
+      </p>
+
+      <p>
+        汰暄酒業精選五款宴席酒款，
+        從日式餐飲的熟悉風味、澳洲奔放果香，
+        到法國隆河的經典氣質，
+        為不同風格的年末聚會，尋找適合的酒款。
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STATEMENT -->
+
+<section class="statement">
+
+  <div class="container statement-inner">
+
+    <h2>
+      A GOOD WINE.<br>
+      A MEMORABLE GATHERING.
+    </h2>
+
+    <div class="statement-side">
+      年末宴席選酒<br>
+      五款酒 · 五種風味 · 五種相聚方式
+    </div>
+
+  </div>
+
+</section>
+
+<!-- COLLECTION -->
+
+<section class="collection" id="collection">
+
+  <div class="container">
+
+    <div class="collection-heading reveal">
+
+      <div>
+
+        <div class="section-label">
+          THE WINE COLLECTION
+        </div>
+
+        <h2>
+          五款宴席酒選
+        </h2>
+
+      </div>
+
+      <p>
+        不同餐桌，不同風味。<br>
+        從熟悉的經典，到值得細細品味的法國酒款。
+      </p>
+
+    </div>
+
+    <!-- WINE 01 -->
+
+    <article class="wine-card reveal">
+
+      <div class="wine-image">
+
+        <img
+          src="les-ormieres-2024.jpg"
+          alt="Les Ormieres 2024 酒瓶"
+          loading="lazy"
+          onerror="this.style.display='none';">
+
+        <div class="image-placeholder">
+          <div class="placeholder-number">01</div>
+          <p>
+            LES ORMIERES<br>
+            ORIGINAL BOTTLE IMAGE
+          </p>
+        </div>
+
+      </div>
+
+      <div class="wine-content">
+
+        <div class="wine-number">01 / THE FAMILIAR</div>
+
+        <div class="wine-region">
+          LES ORMIERES · 2024
+        </div>
+
+        <h3>
+          Les Ormieres
+        </h3>
+
+        <div class="wine-vintage">
+          2024
+        </div>
+
+        <div class="wine-tagline">
+          皇家勳章
+        </div>
+
+        <p class="wine-description">
+          最超值尾牙用酒。
+          以日式餐飲的熟悉風味為故事，
+          呈現一款長期受到餐飲場景青睞的酒款。
+        </p>
+
+        <div class="wine-divider"></div>
+
+        <div class="wine-footer">
+
+          <span>
+            YEAR-END SELECTION
+          </span>
+
+          <a href="#contact">
+            酒款諮詢 ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- WINE 02 -->
+
+    <article class="wine-card reveal">
+
+      <div class="wine-image">
+
+        <img
+          src="gemma-boreal-2025.jpg"
+          alt="Gemma Boreal 2025 酒瓶"
+          loading="lazy"
+          onerror="this.style.display='none';">
+
+        <div class="image-placeholder">
+          <div class="placeholder-number">02</div>
+          <p>
+            GEMMA BOREAL<br>
+            ORIGINAL BOTTLE IMAGE
+          </p>
+        </div>
+
+      </div>
+
+      <div class="wine-content">
+
+        <div class="wine-number">02 / THE CELEBRATION</div>
+
+        <div class="wine-region">
+          GEMMA BOREAL · 2025
+        </div>
+
+        <h3>
+          Gemma Boreal
+        </h3>
+
+        <div class="wine-vintage">
+          2025
+        </div>
+
+        <div class="wine-tagline">
+          為宴席而生的相聚故事
+        </div>
+
+        <p class="wine-description">
+          尾牙用酒，好選擇。
+          以你提供的婚宴賓客故事為靈感，
+          為年末聚會增添值得分享的酒款話題。
+        </p>
+
+        <div class="wine-divider"></div>
+
+        <div class="wine-footer">
+
+          <span>
+            YEAR-END SELECTION
+          </span>
+
+          <a href="#contact">
+            酒款諮詢 ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- WINE 03 -->
+
+    <article class="wine-card reveal">
+
+      <div class="wine-image">
+
+        <img
+          src="jacobs-creek-2023.jpg"
+          alt="傑卡斯經典系列 Shiraz Cabernet 2023 酒瓶"
+          loading="lazy"
+          onerror="this.style.display='none';">
+
+        <div class="image-placeholder">
+          <div class="placeholder-number">03</div>
+          <p>
+            JACOB'S CREEK<br>
+            ORIGINAL BOTTLE IMAGE
+          </p>
+        </div>
+
+      </div>
+
+      <div class="wine-content">
+
+        <div class="wine-number">03 / THE CLASSIC</div>
+
+        <div class="wine-region">
+          JACOB'S CREEK · CLASSIC
+        </div>
+
+        <h3>
+          傑卡斯經典系列
+        </h3>
+
+        <div class="wine-vintage">
+          SHIRAZ CABERNET · 2023
+        </div>
+
+        <div class="wine-tagline">
+          尾牙安全牌，不怕有人不喝
+        </div>
+
+        <p class="wine-description">
+          澳洲國民品牌。
+          果香奔放、單寧柔順，
+          以輕鬆親和的風味印象，
+          為長官敬酒與同事乾杯的餐桌，
+          帶來熟悉而自在的選擇。
+        </p>
+
+        <div class="wine-divider"></div>
+
+        <div class="wine-footer">
+
+          <span>
+            AUSTRALIA · CLASSIC
+          </span>
+
+          <a href="#contact">
+            酒款諮詢 ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- WINE 04 -->
+
+    <article class="wine-card reveal">
+
+      <div class="wine-image">
+
+        <img
+          src="famille-perrin-2023.jpg"
+          alt="Famille Perrin Côtes du Rhône Rouge Réserve 2023 酒瓶"
+          loading="lazy"
+          onerror="this.style.display='none';">
+
+        <div class="image-placeholder">
+          <div class="placeholder-number">04</div>
+          <p>
+            FAMILLE PERRIN<br>
+            ORIGINAL BOTTLE IMAGE
+          </p>
+        </div>
+
+      </div>
+
+      <div class="wine-content">
+
+        <div class="wine-number">04 / THE FRENCH TOUCH</div>
+
+        <div class="wine-region">
+          CÔTES DU RHÔNE · FRANCE
+        </div>
+
+        <h3>
+          Famille Perrin
+        </h3>
+
+        <div class="wine-vintage">
+          CÔTES DU RHÔNE ROUGE RÉSERVE · 2023
+        </div>
+
+        <div class="wine-tagline">
+          教皇新堡名門出手
+        </div>
+
+        <p class="wine-description">
+          Perrin 家族與法國隆河的經典酒款故事。
+          以你提供的酒評描述為基礎，
+          呈現圓潤多汁、尾韻清爽的風味印象，
+          為宴席增添法國酒款的細緻氣質。
+        </p>
+
+        <div class="wine-divider"></div>
+
+        <div class="wine-footer">
+
+          <span>
+            FRANCE · RHÔNE
+          </span>
+
+          <a href="#contact">
+            酒款諮詢 ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- WINE 05 -->
+
+    <article class="wine-card reveal">
+
+      <div class="wine-image">
+
+        <img
+          src="grant-burge-ink-2023.jpg"
+          alt="Grant Burge Barossa Ink Cabernet Sauvignon 2023 酒瓶"
+          loading="lazy"
+          onerror="this.style.display='none';">
+
+        <div class="image-placeholder">
+          <div class="placeholder-number">05</div>
+          <p>
+            GRANT BURGE INK<br>
+            ORIGINAL BOTTLE IMAGE
+          </p>
+        </div>
+
+      </div>
+
+      <div class="wine-content">
+
+        <div class="wine-number">05 / THE STATEMENT</div>
+
+        <div class="wine-region">
+          BAROSSA VALLEY · AUSTRALIA
+        </div>
+
+        <h3>
+          Grant Burge<br>
+          Barossa Ink
+        </h3>
+
+        <div class="wine-vintage">
+          CABERNET SAUVIGNON · 2023
+        </div>
+
+        <div class="wine-tagline">
+          尾牙桌上的「墨水」
+        </div>
+
+        <p class="wine-description">
+          深色酒液，濃郁的黑醋栗與黑巧克力香氣。
+          以 Barossa 的奔放風格為靈感，
+          為年末餐桌帶來鮮明而有存在感的酒款印象。
+        </p>
+
+        <div class="wine-divider"></div>
+
+        <div class="wine-footer">
+
+          <span>
+            AUSTRALIA · BAROSSA
+          </span>
+
+          <a href="#contact">
+            酒款諮詢 ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+<!-- CLOSING -->
+
+<section class="closing">
+
+  <div class="container closing-inner reveal">
+
+    <div class="eyebrow">
+      TAIXUAN ONLINE WINE
+    </div>
+
+    <h2>
+      讓每一次舉杯<br>
+      都值得被記住。
+    </h2>
+
+    <p>
+      年末宴席酒款選品<br>
+      歡迎洽詢汰暄酒業
+    </p>
+
+    <a class="primary-link" href="#contact">
+      CONTACT TAIXUAN
+      <span>↗</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+
+<section class="contact" id="contact">
+
+  <div class="container contact-grid">
+
+    <div class="reveal">
+
+      <div class="section-label">
+        CONTACT
+      </div>
+
+      <h2>
+        為你的宴席<br>
+        尋找合適的酒款。
+      </h2>
+
+      <p>
+        如需酒款資訊、選酒建議或宴席酒款諮詢，
+        歡迎聯繫汰暄酒業。
+      </p>
+
+      <p>
+        由專人提供酒款資訊與選酒建議。
+      </p>
+
+    </div>
+
+    <div class="contact-details reveal">
+
+      <div class="contact-row">
+        <span>品牌</span>
+        <span>汰暄酒業</span>
+      </div>
+
+      <div class="contact-row">
+        <span>電話</span>
+        <span>02-2365-0988</span>
+      </div>
+
+      <div class="contact-row">
+        <span>地址</span>
+        <span>台北市大安區新生南路三段20號之一1F</span>
+      </div>
+
+      <div class="contact-row">
+        <span>營業時間</span>
+        <span>週一至週五 09:00–17:00</span>
+      </div>
+
+      <div class="contact-row">
+        <span>LINE</span>
+        <span>
+          <a href="https://line.me/R/ti/p/@699htlkt"
+             target="_blank"
+             rel="noopener">
+            @699htlkt ↗
+          </a>
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+  <div class="container footer-inner">
+
+    <div class="footer-brand">
+      汰暄酒業
+    </div>
+
+    <small>
+      TAIXUAN ONLINE WINE · FINE WINE · EXCEPTIONAL LIFE
+    </small>
+
+    <div class="footer-links">
+
+      <a href="#top">BACK TO TOP ↑</a>
+
+      <a href="#contact">CONTACT</a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- LEGAL -->
+
+<div class="legal">
+
+  飲酒過量，有害健康。未滿十八歲禁止飲酒。<br>
+
+  本頁提供酒款資訊與選酒介紹，實際商品資訊請洽汰暄酒業。<br>
+
+  請理性飲酒，切勿酒後駕車。
+
+</div>
+
+<script>
+
+/* Mobile navigation */
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+menuToggle.addEventListener("click", () => {
+
+  const isOpen = navLinks.classList.toggle("open");
+
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+
+  document.body.classList.toggle("menu-open", isOpen);
+
+  menuToggle.textContent = isOpen ? "✕" : "☰";
+
+});
+
+navLinks.querySelectorAll("a").forEach(link => {
+
+  link.addEventListener("click", () => {
+
+    navLinks.classList.remove("open");
+
+    menuToggle.setAttribute("aria-expanded", "false");
+
+    document.body.classList.remove("menu-open");
+
+    menuToggle.textContent = "☰";
+
+  });
+
+});
+
+/* Scroll reveal */
+
+const revealElements = document.querySelectorAll(".reveal");
+
+if ("IntersectionObserver" in window) {
+
+  const observer = new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+          entry.target.classList.add("is-visible");
+
+          observer.unobserve(entry.target);
+
+        }
+
+      });
+
+    },
+    {
+      threshold: 0.12
+    }
+  );
+
+  revealElements.forEach(element => {
+    observer.observe(element);
+  });
+
+} else {
+
+  revealElements.forEach(element => {
+    element.classList.add("is-visible");
+  });
+
+}
+
+/* Image placeholder behavior */
+
+document.querySelectorAll(".wine-image, .hero-art").forEach(container => {
+
+  const image = container.querySelector("img");
+
+  const placeholder = container.querySelector(".image-placeholder");
+
+  if (!image || !placeholder) return;
+
+  const updatePlaceholder = () => {
+
+    if (image.complete && image.naturalWidth > 0) {
+
+      placeholder.style.display = "none";
+
+    } else {
+
+      placeholder.style.display = "flex";
+
+    }
+
+  };
+
+  image.addEventListener("load", updatePlaceholder);
+
+  image.addEventListener("error", updatePlaceholder);
+
+  updatePlaceholder();
+
+});
+
+</script>
+
+
+<!-- FLOATING INQUIRY BUTTON -->
+<a href="https://reurl.cc/dO1Rey"
+   class="floating-inquiry-btn"
+   target="_blank"
+   rel="noopener"
+   aria-label="尾牙專人洽詢">
+  <span>尾牙專人洽詢</span>
+  <span class="icon">↗</span>
+</a>
 
 </body>
 </html>
